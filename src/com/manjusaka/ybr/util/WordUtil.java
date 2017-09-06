@@ -8,7 +8,6 @@ import org.apache.poi.POIXMLTextExtractor;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTBody;
 import sun.misc.BASE64Encoder;
 
 import java.io.*;
@@ -58,11 +57,15 @@ public class WordUtil {
      * @throws Exception
      */
     public static String readWord(String path) throws Exception {
+        //获取文档
         OPCPackage opcPackage = POIXMLDocument.openPackage(path);
+        //打开docx文件xml
         XWPFDocument xwpf = new XWPFDocument(opcPackage);
+        //读取xml
         POIXMLTextExtractor extractor = new XWPFWordExtractor(xwpf);
         //WordExtractor extractor = new WordExtractor(is);
-        CTBody ct = xwpf.getDocument().getBody();
+//        CTBody ct = xwpf.getDocument().getBody();
+        //读取内容
         String data = extractor.getText();
         /*String data = ct.xmlText();
         String prefix = data.substring(0, data.indexOf(">") + 1);
@@ -82,8 +85,10 @@ public class WordUtil {
         FileInputStream is = null;
         try {
             is = new FileInputStream(file);
+            //读取字节数组
             byte[] data = new byte[is.available()];
             is.read(data);
+            //转码
             BASE64Encoder encoder = new BASE64Encoder();
             is.close();
             return encoder.encode(data);
